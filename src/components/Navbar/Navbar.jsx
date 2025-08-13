@@ -1,41 +1,43 @@
-import React, { useState } from 'react';
-import './Navbar.css'; // Importa o arquivo CSS para estilização
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom'; // Importe Link e useLocation
+import './Navbar.css'; 
 
-// Importe a imagem do logo (substitua 'caminho/para/o/logo.png' pelo caminho real)
-import logoImage from '../../assets/logo.png'
+import logoImage from '../../assets/logo-sidebar.png';
 
 const Navbar = () => {
-  // Estado para controlar qual link está ativo
-  const [activeLink, setActiveLink] = useState('Início');
+  const location = useLocation(); // Obtém o objeto de localização da URL
+
+  const getActiveClass = (path) => {
+    return location.pathname === path ? 'active' : '';
+  };
 
   return (
     <nav className="navbar-container">
       <div className="navbar-left">
         <ul className="nav-links">
-          <li 
-            className={activeLink === 'Início' ? 'active' : ''}
-            onClick={() => setActiveLink('Início')}
-          >
-            Início
-          </li>
-          <li 
-            className={activeLink === 'Passeios' ? 'active' : ''}
-            onClick={() => setActiveLink('Passeios')}
-          >
-            Passeios
-          </li>
-          <li 
-            className={activeLink === 'Avaliações' ? 'active' : ''}
-            onClick={() => setActiveLink('Avaliações')}
-          >
-            Avaliações
-          </li>
-          <li 
-            className={activeLink === 'Gerenciadores' ? 'active' : ''}
-            onClick={() => setActiveLink('Gerenciadores')}
-          >
-            Gerenciadores
-          </li>
+          <Link to="/inicio" className={`nav-link ${getActiveClass('/inicio')}`}>
+            <li>
+              Início
+            </li>
+          </Link>
+          
+          <Link to="/passeios" className={`nav-link ${getActiveClass('/passeios')}`}>
+            <li>
+              Passeios
+            </li>
+          </Link>
+
+          <Link to="/avaliacoes" className={`nav-link ${getActiveClass('/avaliacoes')}`}>
+            <li>
+              Avaliações
+            </li>
+          </Link>
+
+          <Link to="/gerenciadores" className={`nav-link ${getActiveClass('/gerenciadores')}`}>
+            <li>
+              Gerenciadores
+            </li>
+          </Link>
         </ul>
       </div>
 
