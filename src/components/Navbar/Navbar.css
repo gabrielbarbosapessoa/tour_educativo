@@ -19,7 +19,7 @@
     left: 0;
     width: 100%;
     z-index: 1000;
-    min-height: 11%; /* Usei min-height para se adaptar ao conteúdo */
+    height: 90px; /* Alterado de min-height para height, valor fixo */
     box-sizing: border-box; 
 }
 
@@ -63,6 +63,7 @@
 .logout-text {
     cursor: pointer;
     margin-right: 50px;
+    margin-bottom: 8px;
 }
 
 .fieb-logo {
@@ -98,19 +99,13 @@
     background-color: white;
 }
 
-/*
-  As regras de .nav-links li foram removidas
-  ou ajustadas para evitar duplicação de estilos
-  com a classe .nav-link, mantendo o código mais limpo.
-*/
-
 /* Media Query para telas muito pequenas (celulares) */
 @media (max-width: 500px) {
     .navbar-container {
         flex-direction: column;
         align-items: flex-start;
         padding: 10px 20px;
-        min-height: auto;
+        height: auto; /* Altera a altura fixa para automática em telas pequenas */
     }
     
     .nav-links {

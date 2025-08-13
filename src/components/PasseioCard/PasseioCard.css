@@ -1,0 +1,41 @@
+.passeio-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.582);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  height: 200px;
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+}
+
+.passeio-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-image-placeholder {
+  background-color: #5cb1e0;
+  flex: 0 0 60%; /* topo azul cobre 60% da altura */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+  background-color: white;
+}
