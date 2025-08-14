@@ -1,65 +1,121 @@
-/* Seu arquivo Passeios.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 body {
-  background-color: #f0f2f5;
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .passeios-page-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centraliza o conteúdo horizontalmente */
-  min-height: calc(100vh - 90px);
-  padding-top: 90px;
-  box-sizing: border-box;
-  text-align: center;
-  margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 90px);
+    padding-top: 90px;
+    box-sizing: border-box;
+    text-align: center;
+    margin-top: 30px;
+    /* CORREÇÃO AQUI para expandir o container principal */
+    width: 100%;
 }
 
 .cards-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 60px;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: flex-start;
+    gap: 60px; 
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .add-passeio-button {
-  background-color: #5cb1e0;
-  color: white;
-  border: 1px solid #5cb1e0;
-  border-radius: 20px;
-  padding: 10px 25px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  margin-top: 40px;
+    background-color: #5cb1e0;
+    color: white;
+    border: 1px solid #5cb1e0;
+    border-radius: 20px;
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    width: auto;
+}
+
+.add-passeio-button-container {
+    display: flex;
+    justify-content: center;
+    /* CORREÇÃO AQUI para ocupar a largura total */
+    width: 100%;
+    margin-top: 40px; /* Adicionado um pouco de espaço acima do botão */
 }
 
 .add-passeio-button:hover {
-  background-color: #4da5d0;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    background-color: #4da5d0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Remova a classe .botao-centralizado, pois não será mais necessária */
-
-@media (max-width: 992px) {
-  .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    max-width: 100%;
-    padding: 0 20px;
-  }
+.passeio-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.582);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    height: 200px;
+    width: 330px; 
+    display: flex;
+    flex-direction: column;
 }
 
-@media (max-width: 768px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
+.passeio-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-image-placeholder {
+    background-color: #5cb1e0;
+    flex: 0 0 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-name {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    background-color: white;
 }

@@ -1,13 +1,15 @@
+// Seu arquivo PasseioCard.jsx
 import React from 'react';
-import './PasseioCard.css';
+import './PasseioCard.css'; // Certifique-se de que o CSS está no caminho correto
 
-const PasseioCard = ({ name, image }) => {
+const PasseioCard = ({ passeio, onClick }) => {
   return (
-    <div className="passeio-card">
+    // Adicione a função de clique na div principal do card
+    <div className="passeio-card" onClick={() => onClick(passeio)}>
       <div className="card-image-placeholder">
-        {image && <img src={image} alt={name} className="card-image" />}
+        {/* Aqui você pode renderizar a imagem se tiver */}
       </div>
-      <div className="card-name">{name}</div>
+      <div className="card-name">{passeio.name}</div>
     </div>
   );
 };

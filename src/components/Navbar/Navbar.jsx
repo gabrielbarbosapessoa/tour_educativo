@@ -26,7 +26,11 @@ const Navbar = () => {
               Passeios
             </li>
           </Link>
-
+<Link to="/reservas" className={`nav-link ${getActiveClass('reservas')}`}>
+            <li>
+              Reservas
+            </li>
+          </Link>
           <Link to="/avaliacoes" className={`nav-link ${getActiveClass('/avaliacoes')}`}>
             <li>
               Avaliações
