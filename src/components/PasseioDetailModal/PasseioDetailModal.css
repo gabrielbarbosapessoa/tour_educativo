@@ -43,9 +43,9 @@
     background-color: white;
     border-radius: 35px; /* Borda arredondada no modal inteiro */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 80%;
-    max-width: 900px;
-    height: 600px; 
+    width: 90%;
+    max-width: 1000px;
+    height: 630px; 
     overflow: hidden;
     /* Aplica o efeito de fade-in e scale no modal */
     animation: fadeInScale 0.3s ease-out forwards;
@@ -71,16 +71,17 @@
 }
 
 .detail-modal-title {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 700;
-    color: #333;
-    margin-bottom: 5px;
+    color: black;
+    margin-left: 30px;
+    margin-top: 70px;
 }
 
 .detail-modal-info p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #555;
+    margin: 0 0 20px 30px; /* Define margem: topo 0, direita 0, inferior 10px, esquerda 0 */
+    font-size: 19px;
+    color: black;
 }
 
 .edit-button {
@@ -95,6 +96,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     align-self: center;
+    width:50%;
+    margin-bottom: 35px
 }
 
 .edit-button:hover {
