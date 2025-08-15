@@ -1,65 +1,121 @@
-import React, { useState } from 'react';
-import './AddPasseioPopup.css'; // Certifique-se de que o CSS está no caminho correto
+// src/components/AddPasseioPopup/AddPasseioPopup.jsx
+import React, { useState, useEffect } from 'react';
+import './AddPasseioPopup.css';
 
-const AddPasseioPopup = ({ onClose, onCreate }) => {
-    // Adicionamos estados para cada campo do formulário
-    const [name, setName] = useState('');
-    const [quantAlunos, setQuantAlunos] = useState('');
-    const [unidade, setUnidade] = useState('');
-    const [local, setLocal] = useState('');
-    const [valor, setValor] = useState('');
-    const [data, setData] = useState('');
+const AddPasseioPopup = ({ onClose, onCreate, passeio }) => {
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [preco, setPreco] = useState('');
+  const [dataPasseio, setDataPasseio] = useState('');
+  const [horaSaida, setHoraSaida] = useState('');
+  const [horaChegada, setHoraChegada] = useState('');
+  const [dataInicioRecebimento, setDataInicioRecebimento] = useState('');
+  const [dataFinalRecebimento, setDataFinalRecebimento] = useState('');
+  const [statusPasseio, setStatusPasseio] = useState('');
 
-    const handleCreate = () => {
-        // Crie um objeto com os dados do novo passeio
-        const newPasseio = {
-            name,
-            quantAlunos,
-            unidade,
-            local,
-            valor: parseFloat(valor),
-            data,
-            image: null
-        };
-        // Chame a função onCreate que foi passada como prop
-        onCreate(newPasseio);
-        // Feche o popup
-        onClose();
+  useEffect(() => {
+    if (passeio) {
+      setNome(passeio.nome || '');
+      setDescricao(passeio.descricao || '');
+      setPreco(passeio.preco != null ? String(passeio.preco) : '');
+      setDataPasseio(passeio.dataPasseio || '');
+      setHoraSaida(passeio.horaSaida || '');
+      setHoraChegada(passeio.horaChegada || '');
+      setDataInicioRecebimento(passeio.dataInicioRecebimento || '');
+      setDataFinalRecebimento(passeio.dataFinalRecebimento || '');
+      setStatusPasseio(passeio.statusPasseio || '');
+    }
+  }, [passeio]);
+
+  const handleSave = () => {
+    const newPasseio = {
+      nome,
+      descricao,
+      preco: preco === '' ? null : parseFloat(preco),
+      dataPasseio,
+      horaSaida,
+      horaChegada,
+      dataInicioRecebimento,
+      dataFinalRecebimento,
+      statusPasseio,
+      image: passeio?.image ?? null,
     };
+    onCreate(newPasseio);
+    onClose();
+  };
 
-    return (
-        <div className="popup-overlay">
-            <div className="add-passeio-popup">
-                <div className="popup-header">
-                    <h2 className="popup-title">Passeio</h2>
-                    <button className="close-popup-button" onClick={onClose}>x</button>
-                </div>
-                <div className="popup-form">
-                    <label>Nome do passeio *</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                    <label>Quant. de Alunos *</label>
-                    <input type="number" value={quantAlunos} onChange={(e) => setQuantAlunos(e.target.value)} />
-                    <label>Unidade *</label>
-                    <input type="text" value={unidade} onChange={(e) => setUnidade(e.target.value)} />
-                    <label>Local *</label>
-                    <input type="text" value={local} onChange={(e) => setLocal(e.target.value)} />
-                    <label>Valor: R$ *</label>
-                    <input type="text" value={valor} onChange={(e) => setValor(e.target.value)} />
-                    <label>Data *</label>
-                    <input type="date" value={data} onChange={(e) => setData(e.target.value)} />
-                    <button className="add-image-button">
-                        <span className="add-image-icon">+</span>
-                        <span>Adicionar imagem</span>
-                    </button>
-                </div>
-                <div className="popup-buttons">
-                    <button className="create-button" onClick={handleCreate}>
-                        Criar
-                    </button>
-                </div>
-            </div>
+  return (
+    <div className="popup-overlay" onClick={onClose}>
+      <div className="add-passeio-popup" onClick={(e) => e.stopPropagation()}>
+        <div className="popup-header">
+          <h2 className="popup-title">{passeio ? 'Editar Passeio' : 'Novo Passeio'}</h2>
+          <button className="close-popup-button" onClick={onClose}>x</button>
         </div>
-    );
+
+        <div className="popup-form">
+          <label>Nome do Passeio *</label>
+          <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+
+          <label>Descrição *</label>
+          <textarea
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            rows={4}
+            placeholder="Descreva o passeio, ponto de encontro, regras, etc."
+          />
+
+          <label>Preço: R$ *</label>
+          <input
+            type="number"
+            step="0.01"
+            inputMode="decimal"
+            value={preco}
+            onChange={(e) => setPreco(e.target.value)}
+          />
+
+          <label>Data do Passeio *</label>
+          <input type="date" value={dataPasseio} onChange={(e) => setDataPasseio(e.target.value)} />
+
+          <label>Hora de Saída *</label>
+          <input type="time" value={horaSaida} onChange={(e) => setHoraSaida(e.target.value)} />
+
+          <label>Hora de Chegada *</label>
+          <input type="time" value={horaChegada} onChange={(e) => setHoraChegada(e.target.value)} />
+
+          <label>Início Recebimento *</label>
+          <input
+            type="date"
+            value={dataInicioRecebimento}
+            onChange={(e) => setDataInicioRecebimento(e.target.value)}
+          />
+
+          <label>Fim Recebimento *</label>
+          <input
+            type="date"
+            value={dataFinalRecebimento}
+            onChange={(e) => setDataFinalRecebimento(e.target.value)}
+          />
+
+          <label>Status *</label>
+          <select
+            value={statusPasseio}
+            onChange={(e) => setStatusPasseio(e.target.value)}
+          >
+            <option value="">Selecione...</option>
+            <option value="Aberto">Aberto</option>
+            <option value="Fechado">Fechado</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+        </div>
+
+        <div className="popup-buttons">
+          <button className="create-button" onClick={handleSave}>
+            {passeio ? 'Salvar Alterações' : 'Criar'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default AddPasseioPopup;
