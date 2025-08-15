@@ -4,52 +4,64 @@ import Navbar from '../../components/Navbar/Navbar.jsx';
 import PasseioCard from '../../components/PasseioCard/PasseioCard.jsx';
 import PasseioDetailModal from '../../components/PasseioDetailModal/PasseioDetailModal.jsx';
 import AddPasseioPopup from '../../components/AddPasseioPopup/AddPasseioPopup.jsx';
-import EditPasseioPopup from '../../components/EditPasseioPopup/EditPasseioPopup.jsx'; // Importe o novo componente
+import EditPasseioPopup from '../../components/EditPasseioPopup/EditPasseioPopup.jsx';
 import './Passeios.css';
 
-// Dados de exemplo com mais informações
+// Dados de exemplo com a nova estrutura padronizada
 const initialPasseiosData = [
     { 
         id: 1, 
-        name: 'Passeio 1', 
-        quantAlunos: 500, 
-        unidade: 'Unidade 2', 
-        local: 'Rua Exemplo, Nº01 - SP', 
-        valor: 0.00, 
-        data: '2025-12-12', // Data no formato YYYY-MM-DD para o input type="date"
-        image: null 
+        nome: 'Passeio Histórico', 
+        descricao: 'Visita guiada ao centro histórico da cidade.',
+        foto: null,
+        preco: 50.00,
+        dataPasseio: '2025-12-12',
+        horaSaida: '08:00',
+        horaChegada: '17:00',
+        dataInicioRecebimento: '2025-11-01',
+        dataFinalRecebimento: '2025-12-05',
+        dataCadastro: '2025-10-20T10:00:00',
+        statusPasseio: 'ATIVO',
     },
     { 
         id: 2, 
-        name: 'Passeio 2', 
-        quantAlunos: 300, 
-        unidade: 'Unidade 1', 
-        local: 'Rua Teste, Nº100 - RJ', 
-        valor: 15.50, 
-        data: '2026-01-10',
-        image: null 
+        nome: 'Aventura na Floresta',
+        descricao: 'Trilha em mata fechada, com observação de fauna e flora.',
+        foto: null,
+        preco: 75.50,
+        dataPasseio: '2026-01-10',
+        horaSaida: '09:30',
+        horaChegada: '15:30',
+        dataInicioRecebimento: '2025-12-20',
+        dataFinalRecebimento: '2026-01-05',
+        dataCadastro: '2025-10-21T10:00:00',
+        statusPasseio: 'DISPONIVEL',
     },
 ];
 
 const Passeios = () => {
     const [passeios, setPasseios] = useState(initialPasseiosData);
     const [showAddPopup, setShowAddPopup] = useState(false);
-    const [showEditPopup, setShowEditPopup] = useState(false); // Novo estado para o popup de edição
+    const [showEditPopup, setShowEditPopup] = useState(false);
     const [selectedPasseio, setSelectedPasseio] = useState(null);
 
     const handleCreatePasseio = (newPasseioData) => {
         const newId = Math.max(...passeios.map(p => p.id), 0) + 1;
-        const newPasseio = { ...newPasseioData, id: newId };
+        const newPasseio = { 
+            ...newPasseioData, 
+            id: newId,
+            dataCadastro: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            foto: null, // Assegura que a foto é nula por padrão
+        };
         setPasseios([...passeios, newPasseio]);
     };
     
-    // Nova função para salvar as edições
     const handleSavePasseio = (updatedPasseio) => {
         setPasseios(passeios.map(p => 
             p.id === updatedPasseio.id ? updatedPasseio : p
         ));
-        setSelectedPasseio(updatedPasseio); // Atualiza o modal de detalhes
-        setShowEditPopup(false); // Fecha o popup de edição
+        setSelectedPasseio(updatedPasseio);
+        setShowEditPopup(false);
     };
 
     const handleAddPasseio = () => {
@@ -68,7 +80,6 @@ const Passeios = () => {
         setSelectedPasseio(null);
     };
 
-    // Nova função para abrir o popup de edição
     const handleOpenEditPopup = () => {
         setShowEditPopup(true);
     };
@@ -100,11 +111,11 @@ const Passeios = () => {
                 />
             )}
 
-            {selectedPasseio && !showEditPopup && ( // Adicionado !showEditPopup para não mostrar os dois popups
+            {selectedPasseio && !showEditPopup && (
                 <PasseioDetailModal 
                     passeio={selectedPasseio} 
                     onClose={handleCloseDetailModal} 
-                    onEdit={handleOpenEditPopup} // Passa a nova função para o modal
+                    onEdit={handleOpenEditPopup}
                 />
             )}
 

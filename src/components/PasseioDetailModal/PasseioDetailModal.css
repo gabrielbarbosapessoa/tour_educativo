@@ -75,11 +75,10 @@
     font-weight: 700;
     color: black;
     margin-left: 30px;
-    margin-top: 70px;
 }
 
 .detail-modal-info p {
-    margin: 0 0 20px 30px; /* Define margem: topo 0, direita 0, inferior 10px, esquerda 0 */
+    margin: 0 0 15px 30px; /* Define margem: topo 0, direita 0, inferior 10px, esquerda 0 */
     font-size: 19px;
     color: black;
 }
@@ -96,8 +95,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     align-self: center;
-    width:50%;
-    margin-bottom: 35px
+    width:70%;
 }
 
 .edit-button:hover {

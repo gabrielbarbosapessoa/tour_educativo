@@ -2,7 +2,6 @@
 import React from 'react';
 import './PasseioDetailModal.css';
 
-// Adicione a prop 'onEdit'
 const PasseioDetailModal = ({ passeio, onClose, onEdit }) => {
     return (
         <div className="popup-overlay" onClick={onClose}>
@@ -12,17 +11,19 @@ const PasseioDetailModal = ({ passeio, onClose, onEdit }) => {
                 </div>
                 <div className="detail-modal-content">
                     <div className="detail-text-container">
-                        <h2 className="detail-modal-title">{passeio.name}</h2>
+                        <h2 className="detail-modal-title">{passeio.nome}</h2>
                         <div className="detail-modal-info">
-                            <p><strong>Nome do Passeio:</strong> {passeio.name}</p>
-                            <p><strong>Quant. de Alunos:</strong> {passeio.quantAlunos}</p>
-                            <p><strong>Unidade:</strong> {passeio.unidade}</p>
-                            <p><strong>Local:</strong> {passeio.local}</p>
-                            <p><strong>Valor:</strong> R${passeio.valor.toFixed(2)}</p>
-                            <p><strong>Data:</strong> {passeio.data}</p>
+                            <p><strong>Descrição:</strong> {passeio.descricao}</p>
+                            <p><strong>Preço:</strong> R${passeio.preco.toFixed(2)}</p>
+                            <p><strong>Data do Passeio:</strong> {passeio.dataPasseio}</p>
+                            <p><strong>Hora de Saída:</strong> {passeio.horaSaida}</p>
+                            <p><strong>Hora de Chegada:</strong> {passeio.horaChegada}</p>
+                            <p><strong>Início Recebimento:</strong> {passeio.dataInicioRecebimento}</p>
+                            <p><strong>Fim Recebimento:</strong> {passeio.dataFinalRecebimento}</p>
+                            <p><strong>Status:</strong> {passeio.statusPasseio}</p>
                         </div>
                     </div>
-                    <button className="edit-button" onClick={onEdit}> {/* Adicione o onClick */}
+                    <button className="edit-button" onClick={onEdit}>
                         Editar
                     </button>
                 </div>
