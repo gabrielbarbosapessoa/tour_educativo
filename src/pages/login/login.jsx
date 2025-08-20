@@ -8,10 +8,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
-    e.preventDefault(); // Impede o recarregamento da página
-    // Aqui você pode adicionar a sua lógica de autenticação
-    // ...
-    // Se o login for bem-sucedido, navegue para a página de início
+    e.preventDefault(); 
     navigate("/inicio");
   };
 

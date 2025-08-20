@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Estilo para o container principal */
+.app-container {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+}
+
+/* Centraliza e dá padding ao conteúdo principal, ajustando para a Navbar */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 20px 40px; /* Padding no topo para evitar que a Navbar cubra o conteúdo */
+}
+
+/* Títulos e subtítulos */
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #777;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #5cb1e0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Seção de Cartões de Resumo (Flexbox para responsividade) */
+.summary-cards-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 50px;
+}
+
+.summary-card {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  text-align: center;
+  min-width: 220px;
+  flex: 1; /* Permite que os cards cresçam */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.card-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #5cb1e0;
+  margin: 0;
+}
+
+/* Seção de Ações Rápidas */
+.quick-actions-section {
+  text-align: center;
+}
+
+.quick-actions-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  display: inline-block;
+  background-color: #5cb1e0;
+  color: #fff;
+  padding: 15px 30px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #4a9ec7;
+  transform: translateY(-2px);
+}
+
+/* Media Queries para telas menores */
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .summary-cards-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .summary-card {
+    min-width: 100%;
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 500px) {
+  .quick-actions-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+}

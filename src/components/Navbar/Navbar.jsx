@@ -37,9 +37,6 @@ const Navbar = () => {
             <li>Avaliações</li>
           </Link>
 
-          <Link to="/gerenciadores" className={`nav-link ${getActiveClass('/gerenciadores')}`}>
-            <li>Gerenciadores</li>
-          </Link>
         </ul>
       </div>
 
