@@ -51,12 +51,27 @@
   color: black;
 }
 
-.popup-form input {
+.popup-form input,
+.popup-form textarea {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 13px;
   border: 2px solid black;
   font-size: 14px;
+  /* Add this line to set the background to white */
+  background-color: white;
+  color: black; /* This ensures the text inside is visible */
+}
+
+/* Also apply the same background to the select element */
+.popup-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 13px;
+  border: 2px solid black;
+  font-size: 14px;
+  background-color: white;
+  color: black;
 }
 
 .add-image-button {
@@ -69,7 +84,6 @@
   font-weight: 700;
   cursor: pointer;
   margin-top: 10px;
-
   /* Adicionando Flexbox para alinhar o conteúdo */
   display: flex;
   flex-direction: column; /* Organiza os itens em coluna */
@@ -113,8 +127,9 @@
 }
 
 .close-popup-button {
+  background-color: white;
   color: black;
-  border: none;
+  border: black 2px solid;
   width: 30px;
   height: 30px;
   font-size: 16px;
@@ -122,7 +137,5 @@
   cursor: pointer;
   justify-content: center;
   align-items: center;
-    display: flex;
-  
+  display: flex;
 }
-
