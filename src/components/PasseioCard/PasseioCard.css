@@ -44,3 +44,16 @@
   color: #333;
   background-color: white;
 }
+
+.card-image-placeholder {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

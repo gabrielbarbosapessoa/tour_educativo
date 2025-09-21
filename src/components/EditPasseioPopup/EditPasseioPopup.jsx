@@ -11,8 +11,15 @@ const EditPasseioPopup = ({ passeio, onClose, onSave }) => {
     const [dataInicioRecebimento, setDataInicioRecebimento] = useState(passeio.dataInicioRecebimento);
     const [dataFinalRecebimento, setDataFinalRecebimento] = useState(passeio.dataFinalRecebimento);
     const [statusPasseio, setStatusPasseio] = useState(passeio.statusPasseio);
+    const [loading, setLoading] = useState(false);
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        // Validação básica
+        if (!nome || !descricao || !preco || !dataPasseio || !horaSaida || !horaChegada || !dataInicioRecebimento || !dataFinalRecebimento || !statusPasseio) {
+            alert('Preencha todos os campos obrigatórios!');
+            return;
+        }
+
         const updatedPasseio = {
             ...passeio,
             nome,
@@ -25,8 +32,16 @@ const EditPasseioPopup = ({ passeio, onClose, onSave }) => {
             dataFinalRecebimento,
             statusPasseio,
         };
-        onSave(updatedPasseio);
-        onClose();
+
+        setLoading(true);
+        try {
+            await onSave(updatedPasseio); // função que chama o backend e atualiza a lista
+        } catch (err) {
+            console.error('Erro ao salvar passeio:', err);
+            alert('Não foi possível salvar. Veja o console para detalhes.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -68,12 +83,11 @@ const EditPasseioPopup = ({ passeio, onClose, onSave }) => {
                         <option value="CANCELADO">Cancelado</option>
                         <option value="EXPIRADO">Expirado</option>
                     </select>
-
                 </div>
                 
                 <div className="popup-buttons">
-                    <button className="create-button" onClick={handleSave}>
-                        Salvar
+                    <button className="create-button" onClick={handleSave} disabled={loading}>
+                        {loading ? 'Salvando...' : 'Salvar'}
                     </button>
                 </div>
             </div>

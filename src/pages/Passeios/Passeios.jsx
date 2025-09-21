@@ -1,5 +1,4 @@
-// src/pages/Passeios.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import PasseioCard from '../../components/PasseioCard/PasseioCard.jsx';
 import PasseioDetailModal from '../../components/PasseioDetailModal/PasseioDetailModal.jsx';
@@ -7,86 +6,82 @@ import AddPasseioPopup from '../../components/AddPasseioPopup/AddPasseioPopup.js
 import EditPasseioPopup from '../../components/EditPasseioPopup/EditPasseioPopup.jsx';
 import './Passeios.css';
 
-// Dados de exemplo com a nova estrutura padronizada
-const initialPasseiosData = [
-    { 
-        id: 1, 
-        nome: 'Passeio Histórico', 
-        descricao: 'Visita guiada ao centro histórico da cidade.',
-        foto: null,
-        preco: 50.00,
-        dataPasseio: '2025-12-12',
-        horaSaida: '08:00',
-        horaChegada: '17:00',
-        dataInicioRecebimento: '2025-11-01',
-        dataFinalRecebimento: '2025-12-05',
-        dataCadastro: '2025-10-20T10:00:00',
-        statusPasseio: 'ATIVO',
-    },
-    { 
-        id: 2, 
-        nome: 'Aventura na Floresta',
-        descricao: 'Trilha em mata fechada, com observação de fauna e flora.',
-        foto: null,
-        preco: 75.50,
-        dataPasseio: '2026-01-10',
-        horaSaida: '09:30',
-        horaChegada: '15:30',
-        dataInicioRecebimento: '2025-12-20',
-        dataFinalRecebimento: '2026-01-05',
-        dataCadastro: '2025-10-21T10:00:00',
-        statusPasseio: 'DISPONIVEL',
-    },
-];
+const API_URL = 'http://localhost:8080/api/passeios';
 
 const Passeios = () => {
-    const [passeios, setPasseios] = useState(initialPasseiosData);
+    const [passeios, setPasseios] = useState([]);
     const [showAddPopup, setShowAddPopup] = useState(false);
     const [showEditPopup, setShowEditPopup] = useState(false);
     const [selectedPasseio, setSelectedPasseio] = useState(null);
 
-    const handleCreatePasseio = (newPasseioData) => {
-        const newId = Math.max(...passeios.map(p => p.id), 0) + 1;
-        const newPasseio = { 
-            ...newPasseioData, 
-            id: newId,
-            dataCadastro: new Date().toISOString().slice(0, 19).replace('T', ' '),
-            foto: null, // Assegura que a foto é nula por padrão
-        };
-        setPasseios([...passeios, newPasseio]);
-    };
-    
-    const handleSavePasseio = (updatedPasseio) => {
-        setPasseios(passeios.map(p => 
-            p.id === updatedPasseio.id ? updatedPasseio : p
-        ));
-        setSelectedPasseio(updatedPasseio);
-        setShowEditPopup(false);
+    // Buscar passeios do backend ao carregar
+    useEffect(() => {
+        fetchPasseios();
+    }, []);
+
+    const fetchPasseios = async () => {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            setPasseios(data);
+        } catch (error) {
+            console.error('Erro ao buscar passeios:', error);
+        }
     };
 
-    const handleAddPasseio = () => {
-        setShowAddPopup(true);
+    // Criar passeio
+    const handleCreatePasseio = async (newPasseioData) => {
+        try {
+            const res = await fetch(`${API_URL}/registrar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newPasseioData),
+            });
+            const createdPasseio = await res.json();
+            setPasseios([...passeios, createdPasseio]);
+            setShowAddPopup(false);
+        } catch (error) {
+            console.error('Erro ao criar passeio:', error);
+        }
     };
 
-    const handleCloseAddPopup = () => {
-        setShowAddPopup(false);
+    // Editar passeio
+    const handleSavePasseio = async (updatedPasseio) => {
+        try {
+            const res = await fetch(`${API_URL}/${updatedPasseio.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedPasseio),
+            });
+            const savedPasseio = await res.json();
+            setPasseios(passeios.map(p => p.id === savedPasseio.id ? savedPasseio : p));
+            setSelectedPasseio(savedPasseio);
+            setShowEditPopup(false);
+        } catch (error) {
+            console.error('Erro ao atualizar passeio:', error);
+        }
     };
 
-    const handleCardClick = (passeioData) => {
-        setSelectedPasseio(passeioData);
+    // Deletar passeio
+    const handleDeletePasseio = async (id) => {
+        if (!window.confirm('Tem certeza que deseja deletar este passeio?')) return;
+        try {
+            const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error('Erro ao deletar passeio');
+            setPasseios(passeios.filter(p => p.id !== id));
+            setSelectedPasseio(null);
+        } catch (error) {
+            console.error('Erro ao deletar passeio:', error);
+            alert('Não foi possível deletar o passeio. Veja o console para detalhes.');
+        }
     };
 
-    const handleCloseDetailModal = () => {
-        setSelectedPasseio(null);
-    };
-
-    const handleOpenEditPopup = () => {
-        setShowEditPopup(true);
-    };
-
-    const handleCloseEditPopup = () => {
-        setShowEditPopup(false);
-    };
+    const handleAddPasseio = () => setShowAddPopup(true);
+    const handleCloseAddPopup = () => setShowAddPopup(false);
+    const handleCardClick = (passeioData) => setSelectedPasseio(passeioData);
+    const handleCloseDetailModal = () => setSelectedPasseio(null);
+    const handleOpenEditPopup = () => setShowEditPopup(true);
+    const handleCloseEditPopup = () => setShowEditPopup(false);
 
     return (
         <>
@@ -116,6 +111,7 @@ const Passeios = () => {
                     passeio={selectedPasseio} 
                     onClose={handleCloseDetailModal} 
                     onEdit={handleOpenEditPopup}
+                    onDelete={handleDeletePasseio} // adiciona a função de deletar
                 />
             )}
 

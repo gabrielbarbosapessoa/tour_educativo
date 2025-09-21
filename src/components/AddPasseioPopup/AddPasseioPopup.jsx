@@ -13,6 +13,7 @@ const AddPasseioPopup = ({ onClose, onCreate, passeio }) => {
   const [dataFinalRecebimento, setDataFinalRecebimento] = useState('');
   const [statusPasseio, setStatusPasseio] = useState('');
 
+  // Se for edição, preencher os campos com os dados
   useEffect(() => {
     if (passeio) {
       setNome(passeio.nome || '');
@@ -27,20 +28,39 @@ const AddPasseioPopup = ({ onClose, onCreate, passeio }) => {
     }
   }, [passeio]);
 
+  // Apenas monta o objeto e chama o pai
   const handleSave = () => {
+    if (
+      !nome ||
+      !descricao ||
+      !preco ||
+      !dataPasseio ||
+      !horaSaida ||
+      !horaChegada ||
+      !dataInicioRecebimento ||
+      !dataFinalRecebimento ||
+      !statusPasseio
+    ) {
+      alert('Preencha todos os campos obrigatórios!');
+      return;
+    }
+
     const newPasseio = {
+      ...passeio, // mantém id se for edição
       nome,
       descricao,
-      preco: preco === '' ? null : parseFloat(preco),
+      preco: parseFloat(preco),
       dataPasseio,
       horaSaida,
       horaChegada,
       dataInicioRecebimento,
       dataFinalRecebimento,
       statusPasseio,
-      image: passeio?.image ?? null,
+      foto: null,
+      dataCadastro: new Date().toISOString().split('T')[0],
     };
-    onCreate(newPasseio);
+
+    onCreate(newPasseio); // agora o pai decide se faz POST ou PUT
     onClose();
   };
 
@@ -48,13 +68,21 @@ const AddPasseioPopup = ({ onClose, onCreate, passeio }) => {
     <div className="popup-overlay" onClick={onClose}>
       <div className="add-passeio-popup" onClick={(e) => e.stopPropagation()}>
         <div className="popup-header">
-          <h2 className="popup-title">{passeio ? 'Editar Passeio' : 'Novo Passeio'}</h2>
-          <button className="close-popup-button" onClick={onClose}>x</button>
+          <h2 className="popup-title">
+            {passeio ? 'Editar Passeio' : 'Novo Passeio'}
+          </h2>
+          <button className="close-popup-button" onClick={onClose}>
+            x
+          </button>
         </div>
 
         <div className="popup-form">
           <label>Nome do Passeio *</label>
-          <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+          <input
+            type="text"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
 
           <label>Descrição *</label>
           <textarea
@@ -74,13 +102,25 @@ const AddPasseioPopup = ({ onClose, onCreate, passeio }) => {
           />
 
           <label>Data do Passeio *</label>
-          <input type="date" value={dataPasseio} onChange={(e) => setDataPasseio(e.target.value)} />
+          <input
+            type="date"
+            value={dataPasseio}
+            onChange={(e) => setDataPasseio(e.target.value)}
+          />
 
           <label>Hora de Saída *</label>
-          <input type="time" value={horaSaida} onChange={(e) => setHoraSaida(e.target.value)} />
+          <input
+            type="time"
+            value={horaSaida}
+            onChange={(e) => setHoraSaida(e.target.value)}
+          />
 
           <label>Hora de Chegada *</label>
-          <input type="time" value={horaChegada} onChange={(e) => setHoraChegada(e.target.value)} />
+          <input
+            type="time"
+            value={horaChegada}
+            onChange={(e) => setHoraChegada(e.target.value)}
+          />
 
           <label>Início Recebimento *</label>
           <input

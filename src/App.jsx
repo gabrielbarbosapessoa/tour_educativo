@@ -5,6 +5,7 @@ import Inicio from './pages/Inicio/inicio.jsx';
 import Passeios from './pages/Passeios/Passeios.jsx';
 import Reservas from './pages/Reservas/Reservas.jsx';
 import Avaliacoes from './pages/Avaliacoes/Avaliacoes.jsx';
+import Usuarios from './pages/Usuarios/Usuarios.jsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/passeios" element={<Passeios />} />
         <Route path="/reservas" element={<Reservas />} />
         <Route path="/avaliacoes" element={<Avaliacoes />} />
+        <Route path="/usuarios" element={<Usuarios />} />
       </Routes>
     </BrowserRouter>
   );

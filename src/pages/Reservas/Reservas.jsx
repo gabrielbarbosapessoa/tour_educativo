@@ -1,62 +1,115 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import './Reservas.css';
 
-// Dados de exemplo para a tabela
-const initialReservas = [
-  { id: 1, nome: 'Ana Souza', email: 'ana.souza@email.com', passeio: 'Trilha da Cachoeira', status: 'pago' },
-  { id: 2, nome: 'João Silva', email: 'joao.silva@email.com', passeio: 'Canyon do Pôr do Sol', status: 'nao-pago' },
-  { id: 3, nome: 'Maria Oliveira', email: 'maria.o@email.com', passeio: 'Trilha da Cachoeira', status: 'pago' },
-  { id: 4, nome: 'Pedro Santos', email: 'pedro.s@email.com', passeio: 'Caiaque no Rio', status: 'nao-pago' },
-];
-
 function Reservas() {
-  const [reservas, setReservas] = useState(initialReservas);
+  const [reservas, setReservas] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('todos'); // Novo estado para o filtro de status
+  const [filterStatus, setFilterStatus] = useState('todos');
   const [editingReserva, setEditingReserva] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Lógica de filtragem combinada
+  const baseUrl = 'http://localhost:8080/api';
+
+ useEffect(() => {
+  const fetchReservas = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/reservas');
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+
+      const data = await response.json();
+
+      if (!Array.isArray(data)) throw new Error("Resposta inválida do servidor");
+
+      const formattedData = data.map(r => ({
+        id: r.id,
+        nome: r.nome,
+        turma: r.turma,
+        passeio: r.passeio,
+        status: r.status || 'nao-pago',
+      }));
+
+      setReservas(formattedData);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  fetchReservas();
+}, []);
+
+  // ========================
+  // FILTRAGEM
+  // ========================
   const filteredReservas = reservas.filter(reserva => {
-    // Primeiro, filtra pela barra de pesquisa
     const matchesSearch =
       reserva.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      reserva.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reserva.turma.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reserva.passeio.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // Depois, filtra pelo status (pago, não pago ou todos)
     const matchesStatus =
       filterStatus === 'todos' || reserva.status === filterStatus;
 
     return matchesSearch && matchesStatus;
   });
 
-  // Abre o pop-up com os dados da reserva para edição
+  // ========================
+  // EDIÇÃO E DELETE
+  // ========================
   const handleEditClick = (reserva) => {
     setEditingReserva(reserva);
     setIsPopupOpen(true);
   };
 
-  // Deleta uma reserva da tabela
-  const handleDeleteClick = (id) => {
-    setReservas(reservas.filter(reserva => reserva.id !== id));
+  const handleDeleteClick = async (id) => {
+    try {
+      const response = await fetch(`${baseUrl}/reservas/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Erro ao deletar reserva');
+
+      setReservas(reservas.filter(reserva => reserva.id !== id));
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
-  // Salva as alterações feitas no pop-up
-  const handleSaveChanges = (e) => {
-    e.preventDefault();
-    setReservas(reservas.map(reserva =>
-      reserva.id === editingReserva.id ? editingReserva : reserva
+  const handleSaveChanges = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch(`${baseUrl}/reservas/${editingReserva.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status: editingReserva.status,
+        passeio: editingReserva.passeio, // necessário
+      }),
+    });
+
+    if (!response.ok) throw new Error('Erro ao salvar alterações');
+
+    const updatedReserva = await response.json();
+    setReservas(reservas.map(r =>
+      r.id === updatedReserva.id ? updatedReserva : r
     ));
     setIsPopupOpen(false);
-  };
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
-  // Manipula as mudanças nos campos do formulário de edição
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditingReserva({ ...editingReserva, [name]: value });
   };
+
+  if (loading) return <div className="reservas-container"><p>Carregando reservas...</p></div>;
+  if (error) return <div className="reservas-container"><p>Erro: {error}</p></div>;
 
   return (
     <div className="reservas-container">
@@ -64,17 +117,15 @@ function Reservas() {
       <h1 className="reservas-title">Reservas</h1>
 
       <div className="filters-container">
-        {/* Barra de pesquisa */}
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Pesquisar por nome, email ou passeio..."
+            placeholder="Pesquisar por nome, turma ou passeio..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        {/* Botão de seleção de status */}
         <div className="status-filter">
           <label htmlFor="status-select">Filtrar por Status:</label>
           <select
@@ -94,7 +145,7 @@ function Reservas() {
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Email</th>
+              <th>Turma</th>
               <th>Passeio</th>
               <th>Status</th>
               <th>Ações</th>
@@ -104,7 +155,7 @@ function Reservas() {
             {filteredReservas.map(reserva => (
               <tr key={reserva.id}>
                 <td>{reserva.nome}</td>
-                <td>{reserva.email}</td>
+                <td>{reserva.turma}</td>
                 <td>{reserva.passeio}</td>
                 <td>
                   <div className="status-cell">
@@ -134,15 +185,17 @@ function Reservas() {
                   name="nome"
                   value={editingReserva.nome}
                   onChange={handleInputChange}
+                  disabled
                 />
               </div>
               <div className="form-group">
-                <label>Email:</label>
+                <label>Turma:</label>
                 <input
-                  type="email"
-                  name="email"
-                  value={editingReserva.email}
+                  type="text"
+                  name="turma"
+                  value={editingReserva.turma}
                   onChange={handleInputChange}
+                  disabled
                 />
               </div>
               <div className="form-group">
@@ -152,6 +205,7 @@ function Reservas() {
                   name="passeio"
                   value={editingReserva.passeio}
                   onChange={handleInputChange}
+                  disabled
                 />
               </div>
               <div className="form-group">
